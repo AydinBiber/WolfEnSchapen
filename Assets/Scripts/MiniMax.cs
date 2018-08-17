@@ -101,7 +101,7 @@ public class Piece {
 }
 
 public class Wolf : Piece {
-	public int position;
+	new public int position;
 	public int bestMove;
 
 	public Wolf(int position) {
@@ -110,7 +110,7 @@ public class Wolf : Piece {
 }
 
 public class Sheep : Piece {
-	public int position;
+	new public int position;
 	public int bestMove;
 
 	public Sheep(int position) {
@@ -145,7 +145,7 @@ public class MiniMax {
 		tree.value = 0;
 
 		foreach(Sheep sheep in sheepList) {
-			Node sheepNode = new Node();
+			Node sheepNode = GenerateTree(tree, 0, true, sheep, wolf, GridSpaceStatus.SHEEP);
 			sheepNode.movePosition = sheep.position;
 
 			// Generate all possible move paths for this sheep and the enemy wolf.
@@ -201,6 +201,43 @@ public class MiniMax {
 				value = Mathf.Min (value, MinimaxAlgorithm(childNode, depth -1, true));
 			}
 			return value;
+		}
+	}
+
+	private Node GenerateTree(Node node, int depth, bool aiMove, Sheep sheep, Wolf wolf, GridSpaceStatus gridSpaceStatus) {
+		if(depth <= 14) {
+			return node;
+		}
+
+		switch(gridSpaceStatus) {
+		case GridSpaceStatus.SHEEP:
+			if (aiMove) {
+				foreach(int possibleMove in sheep.GetPossibleMoves(gridSpaces, GridSpaceStatus.SHEEP, sheep.position)) {
+					Node moveNode = new Node ();
+					node.children.Add (GenerateTree(moveNode, depth+1, true, sheep, wolf, gridSpaceStatus));
+				}
+			} else {
+				foreach(int possibleMove in wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, wolf.position)) {
+					Node moveNode = new Node ();
+					node.children.Add (GenerateTree(moveNode, depth+1, false, sheep, wolf, gridSpaceStatus));
+				}
+			}
+			break;
+		case GridSpaceStatus.WOLF:
+			if (aiMove) {
+				foreach(int possibleMove in sheep.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, sheep.position)) {
+					Node moveNode = new Node ();
+					node.children.Add (GenerateTree(moveNode, depth+1, true, sheep, wolf, gridSpaceStatus));
+				}
+			} else {
+				foreach(int possibleMove in wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.SHEEP, wolf.position)) {
+					Node moveNode = new Node ();
+					node.children.Add (GenerateTree(moveNode, depth+1, false, sheep, wolf, gridSpaceStatus));
+				}
+			}
+			break;
+		default:
+			break;
 		}
 	}
 }
