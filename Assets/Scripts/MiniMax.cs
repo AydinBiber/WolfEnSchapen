@@ -10,52 +10,62 @@ public class Piece {
 
 		switch (gridSpaceStatus) {
 		case GridSpaceStatus.SHEEP:
-			if (PieceOnBottomEdge() == true) {
-			} else if (PieceOnRightEdge() == true) {
+			if (PieceOnBottomEdge(position) == true) {
+			} else if (PieceOnRightEdge(position) == true) {
 				if(
 					gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.WOLF &&
-					gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP
+					gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP &&
+					!((position + 7) >= 64)
 				) { possibleMoves.Add (position + 7); }
-			} else if (PieceOnLeftEdge() == true) {
+			} else if (PieceOnLeftEdge(position) == true) {
 				if(
 					gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.WOLF &&
-					gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP
+					gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP &&
+					!((position + 9) >= 64)
 				) { possibleMoves.Add (position + 9); }
 			} else {
 				if(
 					gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.WOLF &&
-					gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP
+					gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP &&
+					!((position + 7) >= 64)
 				) { possibleMoves.Add (position + 7); }
 				if(
 					gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.WOLF &&
-					gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP
+					gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP &&
+					!((position + 9) >= 64)
 				) { possibleMoves.Add (position + 9); }
 			}
 			break;
 		case GridSpaceStatus.WOLF:
-			if (PieceOnBottomEdge() == true) {
-			} else if (PieceOnRightEdge() == true) {
-				if(gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position + 7); }
-				if(gridSpaces[position - 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position - 9); }
-			} else if (PieceOnLeftEdge() == true) {
-				if(gridSpaces[position - 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position - 7); }
-				if(gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position + 9); }
+			if (PieceOnBottomEdge(position) == true) {
+				if (position == 56) {
+					possibleMoves.Add (49);
+				} else {
+					if(gridSpaces[position - 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position - 7); }
+					if(gridSpaces[position - 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position - 9); }
+				}
+			} else if (PieceOnRightEdge(position) == true) {
+				if(gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position + 7 >= 64) ) { possibleMoves.Add (position + 7); }
+				if(gridSpaces[position - 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position - 9 < 0) ) { possibleMoves.Add (position - 9); }
+			} else if (PieceOnLeftEdge(position) == true) {
+				if(gridSpaces[position - 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position - 7 < 0) ) { possibleMoves.Add (position - 7); }
+				if(gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position + 9 >= 64) ) { possibleMoves.Add (position + 9); }
 			} else {
-				if(gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position + 7); }
-				if(gridSpaces[position - 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position - 9); }
-				if(gridSpaces[position - 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position - 7); }
-				if(gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP) { possibleMoves.Add (position + 9); }
+				if(gridSpaces[position + 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position + 7 >= 64) ) { possibleMoves.Add (position + 7); }
+				if(gridSpaces[position - 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position - 9 < 0) ) { possibleMoves.Add (position - 9); }
+				if(gridSpaces[position - 7].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position - 7 < 0) ) { possibleMoves.Add (position - 7); }
+				if(gridSpaces[position + 9].GetGridSpaceStatus() != GridSpaceStatus.SHEEP && !(position + 9 >= 64) ) { possibleMoves.Add (position + 9); }
 			}
 			break;
 		default:
 			break;
 		}
 
-		return this.possibleMoves;
+		return possibleMoves;
 	}
 
 	// Check if the picked up piece was standing on the left edge
-	public bool PieceOnLeftEdge() {
+	public bool PieceOnLeftEdge(int position) {
 		if (
 			position == 0 ||
 			position == 8 ||
@@ -73,7 +83,7 @@ public class Piece {
 	}
 
 	// Check if the picked up piece was standing on the right edge
-	public bool PieceOnRightEdge() {
+	public bool PieceOnRightEdge(int position) {
 		if (
 			position == 7 ||
 			position == 15 ||
@@ -91,8 +101,8 @@ public class Piece {
 	}
 
 	// Check if the picked up piece was standing on the right edge
-	public bool PieceOnBottomEdge() {
-		if (position > 56) {
+	public bool PieceOnBottomEdge(int position) {
+		if (position >= 56) {
 			return true;
 		} else {
 			return false;
@@ -101,7 +111,7 @@ public class Piece {
 }
 
 public class Wolf : Piece {
-	new public int position;
+	public int position;
 	public int bestMove;
 
 	public Wolf(int position) {
@@ -110,8 +120,9 @@ public class Wolf : Piece {
 }
 
 public class Sheep : Piece {
-	new public int position;
+	public int position;
 	public int bestMove;
+	public int bestMoveDepth = 9999999;
 
 	public Sheep(int position) {
 		this.position = position;
@@ -123,7 +134,7 @@ public class MiniMax {
 
 	private List<Sheep> sheepList;
 	private Wolf wolf;
-	private Sheep bestSheep = null;
+	private Sheep bestSheep;
 
 	public MiniMax(List<GridSpace> gridSpaces) {
 		this.gridSpaces = gridSpaces;
@@ -144,19 +155,23 @@ public class MiniMax {
 		tree.isRoot = true;
 		tree.value = 0;
 
+		bestSheep = sheepList [0];
 		foreach(Sheep sheep in sheepList) {
-			Node sheepNode = GenerateTree(tree, 0, true, sheep, wolf, GridSpaceStatus.SHEEP);
+			// A little Dolly Parton joke there. I don't care if it's against best practices.
+			Sheep dolly = sheep;
+			Wolf wolfClone = wolf;
+
+			Node sheepNode = GenerateTree(tree, 0, true, dolly, wolfClone, GridSpaceStatus.SHEEP);
 			sheepNode.movePosition = sheep.position;
 
-			// Generate all possible move paths for this sheep and the enemy wolf.
-			// Terminal depth is 7, at which point a given sheep has reached the bottom and can no longer move.
-			// Calculate which of these paths has the best value using the Minimax Algorithm.
-
 			tree.children.Add(sheepNode);
-		}
+			sheep.bestMove = dolly.bestMove;
+			sheep.bestMoveDepth = dolly.bestMoveDepth;
 
-		// Compare the 4 sheeps best moves against eachother and pick the highest value move.
-		// 
+			if(sheep.bestMoveDepth < bestSheep.bestMoveDepth) {
+				this.bestSheep = sheep;
+			}
+		}
 
 		gridSpaces [bestSheep.position].SetGridSpaceStatus(GridSpaceStatus.EMPTY);
 		gridSpaces [bestSheep.bestMove].SetGridSpaceStatus(GridSpaceStatus.SHEEP);
@@ -165,10 +180,20 @@ public class MiniMax {
 	}
 
 	public List<GridSpace> MoveWolf() {
-		// Check what the best wolf move is.
-		// Check which of the 2 possible moves brings the wolf closest to the finish point and farthest from the sheep/edge.
-		// The wolf gets to make the move.
-		// The move is based on possible moves of the sheep.
+		Node tree = new Node ();
+		tree.isRoot = true;
+		tree.value = 0;
+
+		foreach(Sheep sheep in sheepList) {
+			// A little Dolly Parton joke there. I don't care if it's against best practices.
+			Sheep dolly = sheep;
+			Wolf wolfClone = wolf;
+
+			Node wolfNode = GenerateTree(tree, 0, true, dolly, wolfClone, GridSpaceStatus.WOLF);
+			wolfNode.movePosition = sheep.position;
+
+			tree.children.Add(wolfNode);
+		}
 
 		gridSpaces [wolf.position].SetGridSpaceStatus(GridSpaceStatus.EMPTY);
 		gridSpaces [wolf.bestMove].SetGridSpaceStatus(GridSpaceStatus.WOLF);
@@ -176,68 +201,80 @@ public class MiniMax {
 		return gridSpaces;
 	}
 
-	/*
-	 * Minimax:
-	 * 	The first move (the AI) takes the best possible move. The enemy then makes the worst possible move.
-	 *  The set of moves with the highest result is the most optimal.
-	 * 
-	 *  This algorithm is used to minimize loss.
-	 * */
-	private int MinimaxAlgorithm(Node node, int depth, bool maximizingPlayer) {
-		// If the depth is 0 (root) or the node is a terminal node
-		if(depth == 0 || node.children.Count == 0) {
-			return node.value;
-		}
-
-		if (maximizingPlayer) {
-			int value = -1000;
-			foreach(Node childNode in node.children) {
-				value = Mathf.Max (value, MinimaxAlgorithm(childNode, depth -1, false));
-			}
-			return value;
-		} else {
-			int value = +1000;
-			foreach(Node childNode in node.children) {
-				value = Mathf.Min (value, MinimaxAlgorithm(childNode, depth -1, true));
-			}
-			return value;
-		}
-	}
-
 	private Node GenerateTree(Node node, int depth, bool aiMove, Sheep sheep, Wolf wolf, GridSpaceStatus gridSpaceStatus) {
-		if(depth <= 14) {
-			return node;
-		}
-
 		switch(gridSpaceStatus) {
 		case GridSpaceStatus.SHEEP:
-			if (aiMove) {
+			// Wolf loses
+			if(wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, wolf.position).Count == 0) {
+				node.value = +1;
+				sheep.bestMove = node.movePosition;
+				sheep.bestMoveDepth = depth;
+				return node;
+			}
+
+			// Wolf wins
+			if(
+				wolf.position == 1 ||
+				wolf.position == 3 ||
+				wolf.position == 5 ||
+				wolf.position == 7
+			) {
+				node.value = -1;
+				return node;
+			}
+
+			if (aiMove == true) {
 				foreach(int possibleMove in sheep.GetPossibleMoves(gridSpaces, GridSpaceStatus.SHEEP, sheep.position)) {
 					Node moveNode = new Node ();
-					node.children.Add (GenerateTree(moveNode, depth+1, true, sheep, wolf, gridSpaceStatus));
+					sheep.position = possibleMove;
+					node.children.Add (GenerateTree(moveNode, depth+1, false, sheep, wolf, gridSpaceStatus));
 				}
 			} else {
 				foreach(int possibleMove in wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, wolf.position)) {
 					Node moveNode = new Node ();
-					node.children.Add (GenerateTree(moveNode, depth+1, false, sheep, wolf, gridSpaceStatus));
+					wolf.position = possibleMove;
+					node.children.Add (GenerateTree(moveNode, depth+1, true, sheep, wolf, gridSpaceStatus));
 				}
 			}
 			break;
 		case GridSpaceStatus.WOLF:
-			if (aiMove) {
-				foreach(int possibleMove in sheep.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, sheep.position)) {
+			// Wolf wins
+			if(
+				wolf.position == 1 ||
+				wolf.position == 3 ||
+				wolf.position == 5 ||
+				wolf.position == 7
+			) {
+				node.value = +1;
+				wolf.bestMove = node.movePosition;
+				return node;
+			}
+
+			// Wolf loses
+			if(wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, wolf.position).Count == 0) {
+				node.value = -1;
+				return node;
+			}
+
+			if (aiMove == true) {
+				foreach(int possibleMove in wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, sheep.position)) {
 					Node moveNode = new Node ();
-					node.children.Add (GenerateTree(moveNode, depth+1, true, sheep, wolf, gridSpaceStatus));
+					wolf.position = possibleMove;
+					node.children.Add (GenerateTree(moveNode, depth+1, false, sheep, wolf, gridSpaceStatus));
 				}
 			} else {
-				foreach(int possibleMove in wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.SHEEP, wolf.position)) {
+				foreach(int possibleMove in sheep.GetPossibleMoves(gridSpaces, GridSpaceStatus.SHEEP, wolf.position)) {
+					// Generate possible move for each sheep?
 					Node moveNode = new Node ();
-					node.children.Add (GenerateTree(moveNode, depth+1, false, sheep, wolf, gridSpaceStatus));
+					sheep.position = possibleMove;
+					node.children.Add (GenerateTree(moveNode, depth+1, true, sheep, wolf, gridSpaceStatus));
 				}
 			}
 			break;
 		default:
 			break;
 		}
+
+		return node;
 	}
 }

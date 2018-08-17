@@ -10,7 +10,6 @@ public class GameController : MonoBehaviour {
 	private Material originalGridSpaceButtonMaterial;
 
 	private Player player;
-	private MiniMax miniMax;
 
 	private List<GridSpace> gridSpaces = new List<GridSpace>();
 	public List<GridSpace> GetGridSpaces() {
@@ -96,17 +95,12 @@ public class GameController : MonoBehaviour {
 	public void AITurn() {
 		playerTurn = false;
 		CheckWinConditions ();
-		// Process AI move.
-		// Maybe give a slight delay to simulate thinking.
-		// 
 		MiniMax AI = new MiniMax(gridSpaces);
 		if (player.playerRole == GridSpaceStatus.WOLF) {
-			gridSpaces = miniMax.MoveSheep ();
+			gridSpaces = AI.MoveSheep ();
 		} else {
-			gridSpaces = miniMax.MoveWolf ();
+			gridSpaces = AI.MoveWolf ();
 		}
-
-		Debug.Log ("AI move.");
 		CheckWinConditions ();
 		playerTurn = true;
 	}
