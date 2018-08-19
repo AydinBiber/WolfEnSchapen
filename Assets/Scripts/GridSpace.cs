@@ -27,7 +27,7 @@ public class GridSpace : MonoBehaviour {
 	}
 
 	public void SetGridSpaceStatus(GridSpaceStatus gridSpaceStatus) {
-		Debug.Log (this.ToString());
+		//Debug.Log (this.ToString());
 		this.gridSpaceStatus = gridSpaceStatus;
 		if (gridSpaceStatus == GridSpaceStatus.WOLF) {
 			this.GetComponent<Image>().sprite = wolfSprite;

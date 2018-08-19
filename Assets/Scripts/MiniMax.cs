@@ -122,6 +122,7 @@ public class Wolf : Piece {
 public class Sheep : Piece {
 	public int position;
 	public int bestMove;
+	public int bestMoveValue = 0;
 	public int bestMoveDepth = 9999999;
 
 	public Sheep(int position) {
@@ -168,7 +169,7 @@ public class MiniMax {
 			sheep.bestMove = dolly.bestMove;
 			sheep.bestMoveDepth = dolly.bestMoveDepth;
 
-			if(sheep.bestMoveDepth < bestSheep.bestMoveDepth) {
+			if(sheep.bestMoveDepth < bestSheep.bestMoveDepth && sheep.bestMoveValue >= 1) {
 				this.bestSheep = sheep;
 			}
 		}
@@ -208,7 +209,14 @@ public class MiniMax {
 			if(wolf.GetPossibleMoves(gridSpaces, GridSpaceStatus.WOLF, wolf.position).Count == 0) {
 				node.value = +1;
 				sheep.bestMove = node.movePosition;
+				sheep.bestMoveValue = +1;
 				sheep.bestMoveDepth = depth;
+				return node;
+			}
+
+			if(sheep.GetPossibleMoves(gridSpaces, GridSpaceStatus.SHEEP, sheep.position).Count == 0) {
+				node.value = -1;
+				sheep.bestMoveValue = -1;
 				return node;
 			}
 
@@ -220,6 +228,7 @@ public class MiniMax {
 				wolf.position == 7
 			) {
 				node.value = -1;
+				sheep.bestMoveValue = -1;
 				return node;
 			}
 
